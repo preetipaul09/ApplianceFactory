@@ -149,7 +149,9 @@ def getAllProUrl(driver,category_url):
         # open("soup.txt", "a", encoding="utf-8").write(str(soup))
         # exit()
         products = soup.select('a.css-17vbkdo.eyc351s2')
-
+        
+        count_before = len(product_urls)
+        
         if not products:
             logger.debug(f"No products found on page {pageNumber} for {url}.")
             break
@@ -162,8 +164,13 @@ def getAllProUrl(driver,category_url):
                     product_urls.add(product_url)
                     with open("productUrls(preeti).txt", "a", encoding="utf-8") as f:
                         f.write(product_url + '\n')
-
-        print(f"[Page {pageNumber}] Total unique product URLs found so far: {len(product_urls)}")
+                        
+        count_after = len(product_urls)
+        if count_after == count_before:
+            print(f"No new products found on page {pageNumber}. Assuming end of listing.")
+            break
+            
+        print(f"[Page {pageNumber}] Total unique product URLs found so far: {count_after}")
 
         pageNumber += 1
         if pageNumber == 50:
